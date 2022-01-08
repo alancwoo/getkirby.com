@@ -20,7 +20,7 @@ Text:
 
 ## Introduction
 
-In the vein of to the (link: /docs/cookbook/setup/kirby-meets-docker text: Kirby Meets Docker Recipe), (link: https://dokku.com/ text: Dokku) allows you to containerize and run multiple apps/domains on a single server, manage deployments with git and easily manage domains and certificates with letsencrypt. Dokku can be very helpful for the following reasons:
+In the vein of the (link: /docs/cookbook/setup/kirby-meets-docker text: Kirby Meets Docker Recipe), (link: https://dokku.com/ text: Dokku) allows you to containerize and run multiple apps/domains on a single server, manage deployments with git and easily manage domains and certificates with Let’s Encrypt. Dokku can be very helpful for the following reasons:
 
 1. Zero-downtime deployment with git
 2. Easily manage multiple apps/domains/certificates on one server
@@ -31,7 +31,7 @@ In the vein of to the (link: /docs/cookbook/setup/kirby-meets-docker text: Kirby
 According to the (link: https://dokku.com/docs/getting-started/installation/#what-is-dokku text: Dokku documentation):
 > Dokku is an extensible, open source Platform as a Service that runs on a single server of your choice.
 
-Behind the scenes, Dokku makes use of Docker containerization to run any number of applications on your server. It allows you to essentially create your own PaaS or something like '(link: https://www.heroku.com/ text: Heroku)' where you can deploy and manage your apps. In fact, Dokku will make use of the official (link: https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-php text: Heroku PHP Buildpack) to run your Kirby site.
+Behind the scenes, Dokku makes use of Docker containerization to run any number of applications on your server. It allows you to essentially create your own PaaS or something like (link: https://www.heroku.com/ text: Heroku) where you can deploy and manage your apps. In fact, Dokku will make use of the official (link: https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-php text: Heroku PHP Buildpack) to run your Kirby site.
 
 ## Prerequisites and Requirements
 - Access to cloud servers such as (link: https://www.hetzner.com/ text: Hetzner) or (link: https://digitalocean.com text: Digital Ocean)
@@ -39,14 +39,14 @@ Behind the scenes, Dokku makes use of Docker containerization to run any number 
 - At least 1 GB of system memory. (link: https://dokku.com/docs/getting-started/advanced-installation/#vms-with-less-than-1gb-of-memory text: Workaround for less than 1GB)
 - Basic familiarity with Linux and the command line
 - (link: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git text: Git) and (link: https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos text: composer) installed locally
-- (link: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent text: An ssh key)
+- (link: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent text: An SSH key)
 - A domain name, the ability and knowledge to configure DNS
 
 ## Goals of this recipe
 
 1. Set up two remote Kirby installs on the same server (dev and live)
 2. Set up persistent storage for the sites (necessary to keep content between deployments)
-3. Set up domains and SSL certificates with letsencrypt
+3. Set up domains and SSL certificates with Let’s Encrypt
 4. Bonus: Deployment via GitHub actions
 5. Tips: How to enter a running app, how to add packages to the container
 
@@ -61,7 +61,7 @@ wget https://raw.githubusercontent.com/dokku/dokku/v0.26.6/bootstrap.sh;
 sudo DOKKU_TAG=v0.26.6 bash bootstrap.sh
 ```
 
-Then you will want to connect your ssh key (it will need to be the public key on your local machine, or wherever you plan to deploy from) and set up the domain accordingly.
+Then connect your SSH key (i.e. the public key on your local machine, or wherever you plan to deploy from) and set up the domain accordingly.
 
 ```bash
 # ON SERVER
@@ -78,7 +78,12 @@ Pay attention to the domain name on the last line. For example if your domain is
 
 You can create as many apps as you want. In the case of our tutorial, we will create two apps named `live` and `dev` to show how we are able to run multiple apps/sites on one server and deploy to them independently.
 
-Dokku commands typically follow a syntax such as `dokku primary_command:secondary_command app_name variables`. If you are unsure of commands, you can simply run `dokku` to see a list and then use the command without arguments for more specific help. For example, to learn more about app management, type `dokku apps`.
+Dokku commands typically follow a syntax such as 
+```
+dokku primary_command:secondary_command app_name variables
+````
+
+If you are unsure of commands, you can simply run `dokku` to see a list and then use the command without arguments for more specific help. For example, to learn more about app management, type `dokku apps`.
 
 You will see we create apps with `apps:create <app>`, so we will go ahead and create our apps:
 
@@ -314,20 +319,20 @@ dokku domains:report
 
 When you are satisfied with your domains, set up A records through your DNS management to point to the server's IP address. If you don't have a domain name, you could try a service like (link: https://freedns.afraid.org/ text: FreeDNS).
 
-In the worst case, you could also (link: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/ text: edit your hosts file) so you can test without using a domain/DNS. This would allow you to visit the page without SSL, but will prevent you from using letsencrypt or making the site available to others.
+In the worst case, you could also (link: https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/ text: edit your hosts file) so you can test without using a domain/DNS. This would allow you to visit the page without SSL, but will prevent you from using Let’s Encrypt or making the site available to others.
 
 Once complete, you should be able to visit your sites without encryption. Open your browser and try visiting the pages.
 
-## Setup SSL and Letsencrypt
+## Setup SSL and Let’s Encrypt
 
-(link: https://github.com/dokku/dokku-letsencrypt text: The dokku-letsencrypt plugin) allows you to configure and manage letsencrypt very easily. Get started by installing the plugin:
+(link: https://github.com/dokku/dokku-letsencrypt text: The dokku-letsencrypt plugin) allows you to configure and manage Let’s Encrypt very easily. Get started by installing the plugin:
 
 ```bash
 # SERVER
 sudo dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
 ```
 
-Once installed, you will have many commands available, but first you will need to configure an email address for your apps so that letsencrypt can notify you of issues (upcoming expirations, issues with renewal etc):
+Once installed, you will have many commands available, but first you will need to configure an email address for your apps so that Let’s Encrypt can notify you of issues (upcoming expirations, issues with renewal etc):
 
 ```bash
 # SERVER
@@ -340,7 +345,7 @@ Once installed, you will have many commands available, but first you will need t
 dokku config:set --global DOKKU_LETSENCRYPT_EMAIL=your@email.tld
 ```
 
-Then you can go ahead and enable letsencrypt on your apps:
+Then you can go ahead and enable Let’s Encrypt on your apps:
 
 ```bash
 # SERVER
@@ -415,7 +420,7 @@ ssh-keygen -t ed25519 -C "deploy-live@github"
 cat path_to_key.pub | ssh root@example.domain dokku ssh-keys:add GH_DEPLOY`
 ```
 
-Commi the new workflow/action and GitHub should automatically deploy your app:
+Commit the new workflow/action and GitHub should automatically deploy your app:
 
 ```bash
 # LOCAL
