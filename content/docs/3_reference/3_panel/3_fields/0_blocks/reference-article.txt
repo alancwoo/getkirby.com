@@ -251,7 +251,7 @@ return [
 
 ## Builder & editor migration
 
-Builder and editor field migration has been removed since Kirby 3.7. If you are upgrading to Kirby 3.7+ from an older version with the builder or editor field, please first upgrade to Kirby 3.6 and migrate your content to the new blocks format.
+Builder and editor field migration has been removed since Kirby 3.7. If you are upgrading to Kirby 3.7+ from an older version with the builder or editor field, please first upgrade to Kirby 3.6 and migrate your content to the new blocks format. Visit the (link: https://v36.getkirby.com/docs/reference/panel/fields/blocks#builder-migration text: 3.6 documentation for more detail).
 
 ## Further reading
 
